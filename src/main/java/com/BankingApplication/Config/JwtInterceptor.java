@@ -28,7 +28,9 @@ public class JwtInterceptor implements HandlerInterceptor {
         if(token!=null && token.startsWith("Bearer")){
             JwtToken=token.substring(7,token.length());
         }
-        if(!((request.getRequestURI().contains("/api/accounts/login")) || (request.getRequestURI().contains("/api/accounts/signup")))){
+        if(!((request.getRequestURI().contains("/api/accounts/login"))
+                || (request.getRequestURI().contains("/api/accounts/signup"))
+                || (request.getRequestURI().contains("/api/accounts/getAllAccount/{account_number}")))){
             Claims claims=jwtUtils.verify(JwtToken);
             System.out.println("claims : "+claims);
             if(claims.get("name") != null){

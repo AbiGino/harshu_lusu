@@ -8,4 +8,8 @@ public class CustomException extends RuntimeException{
     public CustomException(String message) {
         super(message);
     }
+
+    public HttpStatus getStatus() {
+        return HttpStatus.BAD_REQUEST;
+    }
 }

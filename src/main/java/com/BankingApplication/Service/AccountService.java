@@ -15,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,8 +34,8 @@ public class AccountService {
 
 
     public ResponseEntity<APIResponse> createAccount(Account account) {
-        ResponseEntity<APIResponse> apiResponseResponseEntity;
-        List<Error> errors = new ArrayList<>();
+        ResponseEntity<APIResponse> apiResponseResponseEntity=null;
+        List<Error> errors;
         Long timeStamp = (Long) Instant.now().getEpochSecond();
         if (account != null) {
             errors = AccountValidation.validateAccount(account);
@@ -46,41 +45,35 @@ public class AccountService {
                 customer.setCreatedAt(timeStamp);
                 customer.setUpdatedAt(timeStamp);
                 account.setCustomer(customer);
-
                 if (account.getBalance() < 500) {
                     errors.add(new Error("Minimum balance requirement not met"));
-                    apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-                    apiResponse.setMessage("Something went wrong");
+                    apiResponse.setStatus(400);
                     apiResponse.setData(errors);
+                    apiResponse.setMessage("Something went wrong");
+                    log.info("Account creation failed!");
                     apiResponseResponseEntity = new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
                 } else {
                     account.setAccount_number((int) (1000 + accountRepository.count()));
                     account.setIsActive(true);
                     account.setCreatedAt(timeStamp);
                     account.setUpdatedAt(timeStamp);
-
-                    account.setCustomer(customer);
                     accountRepository.save(account);
 
                     apiResponse.setData(account);
-                    apiResponse.setStatus(HttpStatus.CREATED.value());
+                    apiResponse.setStatus(201);
                     apiResponse.setMessage("Account Created Successfully");
                     apiResponseResponseEntity = new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
                     log.info("Account created Successfully!");
                 }
             } else {
-                apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-                apiResponse.setMessage("Something went wrong");
+                errors.add(new Error("No data found"));
+                apiResponse.setStatus(400);
                 apiResponse.setData(errors);
+                apiResponse.setMessage("Something went wrong");
+                log.info("Account creation failed!");
                 apiResponseResponseEntity = new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
             }
-        } else {
-            errors.add(new Error("No data for the account"));
-            apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-            apiResponse.setData(errors);
-            apiResponse.setMessage("Something went wrong");
-            apiResponseResponseEntity = new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
-            log.info("Account creation failed!");
+
         }
         return apiResponseResponseEntity;
     }

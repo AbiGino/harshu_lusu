@@ -20,6 +20,4 @@ public class Deposit {
     private Integer account_number;
     private Integer balance;
     private Integer deposit_amount;
-
-
 }

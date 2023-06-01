@@ -3,10 +3,9 @@ package com.BankingApplication.Config;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
-@Data
+
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Component
 public class RequestMeta {

@@ -12,9 +12,10 @@ import java.util.List;
 public class ValidationExceptionHandler extends RuntimeException{
 
     public List<Error> errors = new ArrayList<>();
-    public ValidationExceptionHandler(String message, List<Error> error) {
+    public ValidationExceptionHandler(String message, List<Error> errors) {
         super(message);
-        this.errors = error;
+       this.errors = errors;
     }
+
 
 }

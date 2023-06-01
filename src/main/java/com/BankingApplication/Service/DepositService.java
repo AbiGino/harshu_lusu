@@ -1,7 +1,6 @@
 package com.BankingApplication.Service;
 
 import com.BankingApplication.Common.APIResponse;
-import com.BankingApplication.Common.AccountValidation;
 import com.BankingApplication.Common.Error;
 import com.BankingApplication.Entity.Account;
 import com.BankingApplication.Entity.Deposit;
@@ -15,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,10 +41,11 @@ public class DepositService {
         LinkedHashMap<String, Object> responseData = new LinkedHashMap<>();
         Deposit deposit = new Deposit();
         Transaction transaction = new Transaction();
+        Long timeStamp = (Long) Instant.now().getEpochSecond();
 
         if (account != null && balance != null && balance > 0) {
-            List<Error> errors;
-            errors = AccountValidation.validateAccount(account);
+//            List<Error> errors;
+//            errors = AccountValidation.validateAccount(account);
             Integer amount = balance + account.getBalance();
             account.setBalance(amount);
             accountRepository.save(account);
@@ -57,13 +57,13 @@ public class DepositService {
 
             responseData.put("Deposit", deposit);
             transaction.setAccount_number(account_number);
-            transaction.setTransaction_at(LocalDateTime.now());
+            transaction.setTransaction_at(timeStamp);
             transaction.setAmount(balance);
             transaction.setTransaction_type("deposit");
             transactionRepository.save(transaction);
 
             responseData.put("transaction", transaction);
-            apiResponse.setStatus(200);
+            apiResponse.setStatus(HttpStatus.OK.value());
             apiResponse.setData(responseData);
             apiResponse.setMessage("Amount Deposited Successfully!");
             log.info("Amount deposited Successfully!");
@@ -76,7 +76,6 @@ public class DepositService {
             if (balance == null || balance <= 0) {
                 errors.add(new Error("Invalid balance amount"));
             }
-
             apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
             apiResponse.setData(errors);
             apiResponse.setError("Amount Deposit Failed!");
@@ -86,6 +85,8 @@ public class DepositService {
         return apiResponseResponseEntity;
     }
 }
+
+
 //    public ResponseEntity<APIResponse> deposit(Integer account_number, Integer balance) {
 //        ResponseEntity<APIResponse> apiResponseResponseEntity ;
 //        Customer customer = customerRepository.findByAccountNumber(account_number);

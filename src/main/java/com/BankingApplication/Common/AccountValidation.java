@@ -142,6 +142,7 @@ public class AccountValidation {
                 }
             }
         }
+        System.out.println("errors" +errors);
         return errors;
 
     }

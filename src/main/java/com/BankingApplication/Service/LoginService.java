@@ -8,6 +8,8 @@ import com.BankingApplication.Entity.Customer;
 import com.BankingApplication.Repository.CustomerRepository;
 import com.BankingApplication.Utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,16 +29,34 @@ public class LoginService {
     @Autowired
     JwtUtils jwtUtils;
 
-    public APIResponse login(LoginRequestDTO loginRequestDTO) {
-
+    public ResponseEntity<APIResponse> login(LoginRequestDTO loginRequestDTO) {
+        ResponseEntity<APIResponse> apiResponseResponseEntity=null;
         APIResponse apiResponse = new APIResponse();
         List<Error> errors = LoginRequestValidation.validateLogin(loginRequestDTO);
         String name = loginRequestDTO.getName();
         String password = loginRequestDTO.getPassword();
-        System.out.println(password);
         if (errors.isEmpty()) {
             Customer customer = customerRepository.findByNameAndPassword(name);
-            System.out.println(customer.getPassword());
+            if (bCryptPasswordEncoder.matches(password, customer.getPassword())) {
+                String token = jwtUtils.generateJwt(customer);
+                Map<String, Object> data = new HashMap<>();
+                data.put("Token", token);
+                apiResponse.setStatus(200);
+                apiResponse.setData(data);
+                apiResponse.setMessage("Logged in Successfully");
+                apiResponseResponseEntity = new ResponseEntity<>(apiResponse, HttpStatus.OK);
+            } else {
+                apiResponse.setStatus(400);
+                apiResponse.setData(null);
+                apiResponse.setMessage("Invalid username or password");
+                apiResponseResponseEntity=new ResponseEntity<>(apiResponse,HttpStatus.BAD_REQUEST);
+            }
+        }
+        return apiResponseResponseEntity;
+    }
+}
+
+
 //            if (customer == null) {
 //                apiResponse.setStatus(400);
 //                apiResponse.setData(null);
@@ -54,20 +74,3 @@ public class LoginService {
 //                apiResponse.setData(null);
 //                apiResponse.setMessage("Invalid username or password");
 //            }
-
-            if (bCryptPasswordEncoder.matches(password, customer.getPassword())) {
-                String token = jwtUtils.generateJwt(customer);
-                Map<String, Object> data = new HashMap<>();
-                data.put("Token", token);
-                apiResponse.setStatus(200);
-                apiResponse.setData(data);
-                apiResponse.setMessage("Logged in Successfully");
-            } else {
-                apiResponse.setStatus(400);
-                apiResponse.setData(null);
-                apiResponse.setMessage("Invalid username or password");
-            }
-        }
-        return apiResponse;
-    }
-}

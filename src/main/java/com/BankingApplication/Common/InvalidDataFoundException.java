@@ -8,4 +8,8 @@ public class InvalidDataFoundException extends  RuntimeException {
     public InvalidDataFoundException(String message) {
         super(message);
     }
+
+    public HttpStatus getStatus() {
+        return HttpStatus.NOT_FOUND;
+    }
 }

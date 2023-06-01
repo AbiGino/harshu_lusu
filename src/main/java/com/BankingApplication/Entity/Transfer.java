@@ -10,7 +10,6 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @Table(name = "transfer")
 @Entity
 public class Transfer {

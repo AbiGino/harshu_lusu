@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 @Component
 public class CustomerValidation {
 
-    static List<Error> errors = new ArrayList<>();
+     static  List<Error> errors = new ArrayList<>();
 
     public static List<Error> validateCustomer(Customer customer) {
 
@@ -97,7 +97,6 @@ public class CustomerValidation {
                 }
             }
         }
-
         return errors;
 
     }
@@ -105,3 +104,5 @@ public class CustomerValidation {
 }
 
 
+//^(?=.[0-9])(?=.[a-z])(?=.[A-Z])(?=.[@#$%^&+=])(?=\S+$).{8,}$
+//^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{4,10}$

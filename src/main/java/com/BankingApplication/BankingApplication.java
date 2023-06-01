@@ -12,13 +12,7 @@ public class BankingApplication {
     }
 
 //    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
+//    public RestTemplate restTemplate(){
+//        return  new RestTemplate();
 //    }
-
-//    @Bean
-//    public BCryptPasswordEncoder bCryptPasswordEncoder(){
-//        return new BCryptPasswordEncoder();
-//    }
-
 }

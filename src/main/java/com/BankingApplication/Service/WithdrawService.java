@@ -15,7 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,6 +42,7 @@ public class WithdrawService {
         LinkedHashMap<String, Object> responseData = new LinkedHashMap<>();
         Withdraw withdraw = new Withdraw();
         Transaction transaction = new Transaction();
+        Long timeStamp = (Long) Instant.now().getEpochSecond();
         if (account != null && balance != null && balance > 0) {
             Integer amount = account.getBalance() - balance;
             account.setBalance(amount);
@@ -56,7 +57,7 @@ public class WithdrawService {
 
             responseData.put("Withdraw", withdraw);
             transaction.setAccount_number(account_number);
-            transaction.setTransaction_at(LocalDateTime.now());
+            transaction.setTransaction_at(timeStamp);
             transaction.setAmount(balance);
             transaction.setTransaction_type("withdraw");
             transactionRepository.save(transaction);
@@ -77,7 +78,6 @@ public class WithdrawService {
             } else if (account != null && account.getBalance() < balance) {
                 errors.add(new Error("Insufficient balance"));
             }
-
             apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
             apiResponse.setData(errors);
             apiResponse.setError("Amount Withdrawn Failed!");

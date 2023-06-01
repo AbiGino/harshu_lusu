@@ -18,7 +18,6 @@ public class GlobalExceptionHandler {
         apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         apiResponse.setMessage(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(apiResponse);
-
     }
 
     @ExceptionHandler(InsufficientBalanceException.class)
@@ -46,4 +45,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(apiResponse);
     }
 
+    public void setApiResponse(APIResponse response) {
+    }
 }

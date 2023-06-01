@@ -22,5 +22,4 @@ public class APIResponse {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Object data;
 
-
 }

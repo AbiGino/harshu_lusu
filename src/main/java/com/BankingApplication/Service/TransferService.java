@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,6 +41,7 @@ public class TransferService {
         Transfer transfer = new Transfer();
         LinkedHashMap<String, Object> responseData = new LinkedHashMap<>();
         Transaction transaction = new Transaction();
+        Long timeStamp = (Long) Instant.now().getEpochSecond();
 
         if (fromAccount != null && toAccount != null && balance != null && balance > 0 && fromAccount.getBalance() >= balance) {
             fromAccount.setBalance(fromAccount.getBalance() - balance);
@@ -55,12 +56,12 @@ public class TransferService {
 
             responseData.put("Transfer", transfer);
             transaction.setAccount_number(fromAccountNumber);
-            transaction.setTransaction_at(LocalDateTime.now());
+            transaction.setTransaction_at(timeStamp);
             transaction.setAmount(balance);
             transactionRepository.save(transaction);
 
             transaction.setAccount_number(toAccountNumber);
-            transaction.setTransaction_at(LocalDateTime.now());
+            transaction.setTransaction_at(timeStamp);
             transaction.setAmount(balance);
             transactionRepository.save(transaction);
 
