@@ -52,7 +52,7 @@ public class CustomerController {
         urlParams.put("account_number", account_number);
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        HttpEntity <String> entity = new HttpEntity<String>(headers);
+        HttpEntity<String> entity = new HttpEntity<String>(headers);
         return restTemplate.exchange(apiUrl, HttpMethod.GET, entity, RootGetById.class,urlParams).getBody();
     }
 

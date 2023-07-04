@@ -44,7 +44,7 @@ public class CustomerControllerTest {
     @BeforeEach
     public void start(){
         List<Account> account= new ArrayList<>();
-        Customer customer = new Customer(1,"abi","Abi@20","9363464626","abi@gmail.com",true,System.currentTimeMillis(),System.currentTimeMillis(),account);
+        customer = new Customer(1,"abi","Abi@20","9363464626","abi@gmail.com",true,System.currentTimeMillis(),System.currentTimeMillis(),account);
     }
     @Test
     @Order(1)

@@ -98,7 +98,6 @@ public class DepositServiceTest {
         deposit.setAccount_number(1);
         deposit.setDeposit_amount(100);
         Transaction transaction = new Transaction();
-//        account.setBalance(100);
         account.setAccount_number(1);
         when(accountRepository.findByAccountNumber(1)).thenReturn(account);
         when(depositRepository.save(deposit)).thenReturn(deposit);
